@@ -94,16 +94,31 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   
   async function isDomainAvailable(domain) {
+    const primaryAPI = `https://domain-available-api.arbs09.dev/check?domain=${domain}`;
+    const secondaryAPI = `https://domain-available-api.vercel.app/check?domain=${domain}`;
+  
     try {
-      let response = await fetch(`https://domain-available-api.arbs09.dev/check?domain=${domain}`);
+      let response = await fetch(primaryAPI);
       if (!response.ok) {
-        throw new Error(`API returned status ${response.status}`);
+        throw new Error(`Primary API returned status ${response.status}`);
       }
       let data = await response.json();
       return !data.available;
     } catch (error) {
-      console.error(`Error checking domain ${domain}:`, error);
-      return false;
+      console.error(`Primary API failed, trying secondary API for domain ${domain}:`, error);
+  
+      try {
+        let response = await fetch(secondaryAPI);
+        if (!response.ok) {
+          throw new Error(`Secondary API returned status ${response.status}`);
+        }
+        let data = await response.json();
+        return !data.available;
+      } catch (error) {
+        console.error(`Secondary API failed for domain ${domain}:`, error);
+        return false;
+      }
     }
   }
+  
   
