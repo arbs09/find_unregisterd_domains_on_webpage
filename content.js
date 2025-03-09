@@ -16,13 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }))].filter(Boolean);
   
-      chrome.runtime.sendMessage({ domains: uniqueDomains });
+      browser.runtime.sendMessage({ domains: uniqueDomains });
     } catch (e) {
       console.error("Error collecting domains:", e);
     }
   }
   
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "rescan") {
       collectDomains();
     } else if (message.unregisterdDomains) {

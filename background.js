@@ -1,24 +1,24 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.domains && message.domains.length > 0) {
       checkunregisterdDomains(message.domains, sender.tab.id)
         .then(unregisterdDomains => {
-          chrome.storage.local.set({ 
+          browser.storage.local.set({ 
             unregisterdDomains: unregisterdDomains,
             lastChecked: new Date().toISOString(),
             pageUrl: sender.tab.url
           });
-          
-          chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { unregisterdDomains });
+  
+          browser.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            browser.tabs.sendMessage(tabs[0].id, { unregisterdDomains });
           });
   
-          chrome.action.setBadgeText({
+          browser.action.setBadgeText({
             text: unregisterdDomains.length.toString(),
             tabId: sender.tab.id
           });
-          
+  
           if (unregisterdDomains.length > 0) {
-            chrome.action.setBadgeBackgroundColor({
+            browser.action.setBadgeBackgroundColor({
               color: "#4caf50",
               tabId: sender.tab.id
             });
@@ -36,12 +36,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const batchSize = 30;
     const minuteDelay = 60000;
   
-    chrome.action.setBadgeText({
+    browser.action.setBadgeText({
       text: "0/" + domains.length,
       tabId: tabId
     });
   
-    chrome.action.setBadgeBackgroundColor({
+    browser.action.setBadgeBackgroundColor({
       color: "#FF9800",
       tabId: tabId
     });
@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           if (!available) unregisterd.push(domain);
           processedCount++;
   
-          chrome.action.setBadgeText({
+          browser.action.setBadgeText({
             text: processedCount + "/" + domains.length,
             tabId: tabId
           });
@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           console.error(`Error checking domain ${domain}:`, error);
           processedCount++;
   
-          chrome.action.setBadgeText({
+          browser.action.setBadgeText({
             text: processedCount + "/" + domains.length,
             tabId: tabId
           });
@@ -80,7 +80,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const timeToWait = Math.max(minuteDelay - elapsedTime, 0);
   
         if (timeToWait > 0) {
-          chrome.action.setBadgeText({
+          browser.action.setBadgeText({
             text: "WAIT",
             tabId: tabId
           });
