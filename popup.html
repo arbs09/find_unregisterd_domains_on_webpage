@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Expired Domains Finder</title>
+  <style>
+    body {
+      width: 400px;
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .domain-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .domain-item {
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    .domain-item:last-child {
+      border-bottom: none;
+    }
+    .info {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .no-domains {
+      padding: 20px;
+      text-align: center;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Expired Domains Finder</h1>
+  <div class="info" id="info">Loading...</div>
+  <div class="domain-list" id="domainList">
+    <div class="no-domains">Scanning for expired domains...</div>
+  </div>
+  <button id="copyAll">Copy All Domains</button>
+  <button id="rescan">Rescan Page</button>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
