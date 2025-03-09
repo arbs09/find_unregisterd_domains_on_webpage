@@ -1,23 +1,23 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.domains && message.domains.length > 0) {
-      checkExpiredDomains(message.domains, sender.tab.id)
-        .then(expiredDomains => {
+      checkunregisterdDomains(message.domains, sender.tab.id)
+        .then(unregisterdDomains => {
           chrome.storage.local.set({ 
-            expiredDomains: expiredDomains,
+            unregisterdDomains: unregisterdDomains,
             lastChecked: new Date().toISOString(),
             pageUrl: sender.tab.url
           });
           
           chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { expiredDomains });
+            chrome.tabs.sendMessage(tabs[0].id, { unregisterdDomains });
           });
   
           chrome.action.setBadgeText({
-            text: expiredDomains.length.toString(),
+            text: unregisterdDomains.length.toString(),
             tabId: sender.tab.id
           });
           
-          if (expiredDomains.length > 0) {
+          if (unregisterdDomains.length > 0) {
             chrome.action.setBadgeBackgroundColor({
               color: "#4caf50",
               tabId: sender.tab.id
@@ -31,8 +31,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   });
   
-  async function checkExpiredDomains(domains, tabId) {
-    let expired = [];
+  async function checkunregisterdDomains(domains, tabId) {
+    let unregisterd = [];
     const batchSize = 30;
     const minuteDelay = 60000;
   
@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   
       const promises = batch.map(domain => isDomainAvailable(domain)
         .then(available => {
-          if (!available) expired.push(domain);
+          if (!available) unregisterd.push(domain);
           processedCount++;
   
           chrome.action.setBadgeText({
@@ -90,7 +90,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     }
   
-    return expired;
+    return unregisterd;
   }
   
   async function isDomainAvailable(domain) {

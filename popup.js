@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyAllButton = document.getElementById('copyAll');
     const rescanButton = document.getElementById('rescan');
   
-    chrome.storage.local.get(['expiredDomains', 'lastChecked', 'pageUrl'], function(data) {
-      if (data.expiredDomains && data.expiredDomains.length > 0) {
-        displayDomains(data.expiredDomains);
-        updateInfo(data.expiredDomains.length, data.lastChecked, data.pageUrl);
+    chrome.storage.local.get(['unregisterdDomains', 'lastChecked', 'pageUrl'], function(data) {
+      if (data.unregisterdDomains && data.unregisterdDomains.length > 0) {
+        displayDomains(data.unregisterdDomains);
+        updateInfo(data.unregisterdDomains.length, data.lastChecked, data.pageUrl);
       } else {
-        domainList.innerHTML = '<div class="no-domains">No expired domains found on this page.</div>';
+        domainList.innerHTML = '<div class="no-domains">No unregisterd domains found on this page.</div>';
         updateInfo(0, data.lastChecked, data.pageUrl);
       }
     });
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   
     function updateInfo(count, lastChecked, pageUrl) {
-      let infoText = `Found ${count} expired domain${count !== 1 ? 's' : ''}`;
+      let infoText = `Found ${count} unregisterd domain${count !== 1 ? 's' : ''}`;
   
       if (lastChecked) {
         const date = new Date(lastChecked);
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   
     copyAllButton.addEventListener('click', function() {
-      chrome.storage.local.get(['expiredDomains'], function(data) {
-        if (data.expiredDomains && data.expiredDomains.length > 0) {
-          const domainsText = data.expiredDomains.join('\n');
+      chrome.storage.local.get(['unregisterdDomains'], function(data) {
+        if (data.unregisterdDomains && data.unregisterdDomains.length > 0) {
+          const domainsText = data.unregisterdDomains.join('\n');
           navigator.clipboard.writeText(domainsText).then(function() {
             copyAllButton.textContent = 'Copied!';
             setTimeout(() => {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     rescanButton.addEventListener('click', function() {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action: "rescan"});
-        domainList.innerHTML = '<div class="no-domains">Rescanning page for expired domains...</div>';
+        domainList.innerHTML = '<div class="no-domains">Rescanning page for unregisterd domains...</div>';
         rescanButton.disabled = true;
         rescanButton.textContent = 'Scanning...';
   

@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "rescan") {
       collectDomains();
-    } else if (message.expiredDomains) {
-      console.log("Found expired domains:", message.expiredDomains);
+    } else if (message.unregisterdDomains) {
+      console.log("Found unregisterd domains:", message.unregisterdDomains);
     }
   });
   

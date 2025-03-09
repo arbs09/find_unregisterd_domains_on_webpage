@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Find Expired Domains on a webpage",
+    "name": "Find unregisterd Domains on a webpage",
     "version": "1.0",
     "description": "It does what the title says",
     "permissions": ["activeTab", "storage"],
