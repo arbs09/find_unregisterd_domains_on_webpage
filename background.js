@@ -96,13 +96,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   async function isDomainAvailable(domain) {
     try {
       let cleanedDomain = domain.replace(/^www\./, '');
-      let domainRegex = /^[a-zA-Z0-9-]+\.(?:[a-zA-Z]{2,})$/;
+      
+      let parts = cleanedDomain.split('.');
+      let baseDomain = parts.slice(parts.length - 2).join('.');
   
-      if (!domainRegex.test(cleanedDomain)) {
-        throw new Error('Invalid domain format');
-      }
-  
-      let response = await fetch(`https://domain-available-api.arbs09.dev/check?domain=${cleanedDomain}`);
+      let response = await fetch(`https://domain-available-api.arbs09.dev/check?domain=${baseDomain}`);
       if (!response.ok) {
         throw new Error(`API returned status ${response.status}`);
       }
@@ -113,4 +111,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error(`Error checking domain ${domain}:`, error);
       return false;
     }
-  }  
+  }
+  
