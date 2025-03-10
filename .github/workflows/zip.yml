@@ -11,14 +11,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Create zip file
       run: |
         zip -r extension.zip * -x "*.git*" -x "*.github"
     
     - name: Upload zip artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: extension
         path: extension.zip
