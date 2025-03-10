@@ -100,7 +100,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       let parts = cleanedDomain.split('.');
       let baseDomain = parts.slice(parts.length - 2).join('.');
   
-      let response = await fetch(`https://domain-available-api.vercel.app/check?domain=${baseDomain}`);
+      let response = await fetch(`https://domain-available-api.arbs09.dev/check?domain=${baseDomain}`);
       if (!response.ok) {
         throw new Error(`API returned status ${response.status}`);
       }
